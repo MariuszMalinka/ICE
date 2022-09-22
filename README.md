@@ -1,2 +1,2 @@
 # ICE
-Multidimensional model calculating optimal output value
+Multidimensional model calculating optimal output value.
