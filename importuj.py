@@ -10,7 +10,8 @@ def importuj ():
     wejsc_start = 3#int(input('Wprowadź index pierwszej kolumny zawierającej wartości zewnętrzne (3): '))
     wejsc_koniec = 8#int(input('Wprowadź index ostatniej kolumny zawierającej wartości zewnętzrzne (8): '))
 
-    ## Creating arrays for further operations (2 lines)
-    x=np.array(a.iloc[wierszstart:wierszkoniec,wejsc_start:wejsc_koniec])
-    y=np.array(a.iloc[wierszstart:wierszkoniec,optymalna:optymalna+1])
-    return (x,y)
+    ## Creating arrays for further operations (3 lines)
+    k = a.columns[wejsc_start:wejsc_koniec]
+    x = np.array(a.iloc[wierszstart:wierszkoniec,wejsc_start:wejsc_koniec])
+    y = np.array(a.iloc[wierszstart:wierszkoniec,optymalna:optymalna+1])
+    return (x,y,k)
