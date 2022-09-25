@@ -1,7 +1,13 @@
 import numpy as np
 import pandas as pd
 def importuj ():
-    a = pd.read_excel(input('Nazwa pliku excel: ') + str('.xlsx'))
+    
+    ## Importing Excel file (5 lines)
+    user_input = input('Please enter excel file name: ')
+    try:
+        a = pd.read_excel(user_input + str('.xlsx'))
+    except:
+        a = pd.read_excel(str(user_input))
 
     ## Setting the boundaries of data to operate on (5 lines)
     wierszstart = 0#int(input('Wprowadź index wiersza początkowego (domyślnie 0): '))
