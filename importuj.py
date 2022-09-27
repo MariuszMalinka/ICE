@@ -3,19 +3,21 @@ import numpy as np
 import pandas as pd
 def importuj ():
     
-    ## Import and distinguish a file (15 lines)
+    ## Import and distinguish a file (14 lines)
     user_input = input('Please enter file name or path: ')
-    try:    
+
+    if user_input.find ('.xlsx') >= 0 :
+        a = pd.read_excel(user_input)
+        return importujExcel(a)
+
+    elif user_input.find ('.csv') >= 0 :
+        a = pd.read_csv(user_input)
+        return importujCSV(a)
+
+    else:
         try:
-            a = pd.read_excel(user_input)
-            return importujExcel(a)
-        except:
             a = pd.read_excel(user_input + str('.xlsx'))
             return importujExcel(a)
-    except:
-        try:
-            a = pd.read_csv(user_input)
-            return importujCSV(a)
         except:
             a = pd.read_csv(user_input + str('.csv'))
             return importujCSV(a)
