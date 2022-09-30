@@ -39,33 +39,38 @@ def importujExcel (a):
     impsetting = input()
 
     ## Setting import boundaries according to standard excel file (6 lines)
-    if impsetting == 'Standard' or impsetting == 'standard':
+    if impsetting in ['Standard','standard']:
         wierszstart = 0
         wierszkoniec = -1
         optymalna = 2
         wejsc_start = 3
         wejsc_koniec = 8
     
-    ## User sets import boundaries (19 lines)
-    elif impsetting == 'Manual' or impsetting == 'manual':
+    ## User sets import boundaries (21 lines)
+    elif impsetting in ['Manual','manual']:
         g = list(a.columns)
         wierszstart = int(input('Please enter index of the first row: '))
         wierszkoniec = int(input('Please enter index of the last row: '))
+
         user_input = input('Please enter index or name of the column with optimal values: ')
-        try:
-            optymalna = int(user_input)
-        except: 
+        if user_input in g:
             optymalna = g.index(user_input)
+        else:
+            optymalna = int(user_input)
+
         user_input = input('Please enter index or name of the first column with input values: ')
-        try:
-            wejsc_start = int(user_input)
-        except:
+        if user_input in g:
             wejsc_start = g.index(user_input)
+        else:
+            wejsc_start = int(user_input)
+
         user_input = input('Please enter index or name of the last column with input values: ')
-        try:
+        if user_input in g:
+            wejsc_koniec = g.index(user_input) + 1
+        elif user_input == str(-1):
             wejsc_koniec = int(user_input)
-        except:
-            wejsc_koniec = g.index(user_input)
+        else:
+            wejsc_koniec = int(user_input) + 1
 
     else:
         print('Something went wrong, maybe you misspelled the option.')
@@ -79,4 +84,6 @@ def importujExcel (a):
     return (x,y,k)
 
 def importujCSV (a):
-    return 0
+    print('CSV support coming soon!')
+    time.sleep(5)
+    quit()
