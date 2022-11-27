@@ -11,7 +11,7 @@ def importuj ():
         a = pd.read_excel(str(user_input))
 
     ## User states the import settings option (18 lines)
-    print('Choose between importing option.\n Write "Standard" if your file is compatible with standard file format.\n Write "Manual" if you want to set data boundaries by yourself.\nFor additional information check the user manual.')
+    print('Choose between importing option.\n Type in "Standard" if your file is compatible with standard Excel file format.\n Type in "Manual" if you want to set data boundaries by yourself.\nFor additional information check the user manual.')
     impsetting = input()
     if impsetting == 'Standard' or impsetting == 'standard':
         wierszstart = 0
