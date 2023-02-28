@@ -5,6 +5,7 @@ import pandas as pd
 import csv
 def importuj ():
     
+
     ## Creating a class containing all important information
     class Data:
         def __init__(self,type,optimal_output,input_variables,column_names,table):
@@ -56,6 +57,7 @@ def importuj ():
 
 def importujExcel (data1):
     print('Choose between importing option.\n Write "Standard" if your file is compatible with standard file format.\n Write "Manual" if you want to set data boundaries by yourself.\nFor additional information check the user manual.')
+
     impsetting = input()
 
     ## Setting import boundaries according to standard excel file
