@@ -5,6 +5,7 @@ import pandas as pd
 import csv
 def importuj ():
     
+    ## Creating a class containing all important information
     class Data:
         def __init__(self,type,optimal_output,input_variables,column_names,table):
             self.type = type
@@ -21,6 +22,7 @@ def importuj ():
 
     if user_input.find ('.xlsx') >= 0 :
         data1.table = pd.read_excel(user_input)
+        data1.table.dropna(inplace=True)
         data1.type = 'Excel'
         return importujExcel(data1)
 
@@ -40,6 +42,7 @@ def importuj ():
                 break
         if j == 'xlsx' :
             data1.table = pd.read_excel(user_input + str('.xlsx'))
+            data1.table.dropna(inplace=True) ## Deleting empty rows
             data1.type = 'Excel'
             return importujExcel(data1)
         elif j == 'csv' :
@@ -98,13 +101,9 @@ def importujExcel (data1):
     data1.column_names = data1.table.columns[wejsc_start:wejsc_koniec]
     data1.input_variables = np.array(data1.table.iloc[wierszstart:wierszkoniec,wejsc_start:wejsc_koniec])
     data1.optimal_output = np.array(data1.table.iloc[wierszstart:wierszkoniec,optymalna:optymalna+1])
-    print(data1.input_variables)
-    print(data1.optimal_output)
     return (data1)
 
 def importujCSV (data1):
     data1.optimal_output = np.array(data1.table.iloc[:,0:1])
     data1.input_variables = np.array(data1.table.iloc[:,1:])
-    print(data1.input_variables)
-    print(data1.optimal_output)
     return (data1)

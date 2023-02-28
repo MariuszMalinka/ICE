@@ -10,7 +10,6 @@ b = estimation.estimation(data1.input_variables,data1.optimal_output)
 
 if data1.type == 'Excel':
     ## User enters values to calculate optimal value
-    print(b)
     print('\nPlease enter input values to calculate optimal output value.')
     w=list()
     for i in range(len(data1.column_names)):
@@ -28,7 +27,6 @@ if data1.type == 'Excel':
 
 if data1.type == 'CSV':
     ## User enters values to calculate optimal value
-    print(b)
     print('\nPlease enter input values to calculate optimal output value.')
     w=list()
     for i in range(data1.input_variables.shape[1]):
