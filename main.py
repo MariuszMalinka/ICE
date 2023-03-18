@@ -1,14 +1,45 @@
 import time
 import importuj
 import estimation
+import numpy as np
 
 ## Importing variable for further use
 (data1) = importuj.importuj()
 
-## Calculating the coefficients standing by the values in the further equation
-b = estimation.estimation(data1.input_variables,data1.optimal_output)
-
 if data1.type == 'Excel':
+
+    ## User selects estimation options
+    print('Choose between estimation options.\n Write "Hour based" to treat data based on corresponding hour. \n Write "Day based" to treat data based on corresponding day of the week.\n Write "All" to treat all data. \nFor additional information check the user manual.')
+    
+    estimation_option = input()
+    
+    if estimation_option in ['Hour based','hour based']:
+        hour_check = input('Insert the time to which the relevant data should be treated. \n')
+        matching_rows = data1.table.iloc[:, 1] == hour_check
+        matching_rows = matching_rows[:-1]
+        if matching_rows.any():
+            data1.input_variables = data1.input_variables[matching_rows]
+            data1.optimal_output = data1.optimal_output[matching_rows]
+        else:
+            pass
+
+    elif estimation_option in ['Day based','day based']:
+        day_check = input('Insert the day to which the relevant data should be treated. \n')
+        matching_rows = data1.table.iloc[:, 0] == day_check
+        matching_rows = matching_rows[:-1]
+        if matching_rows.any():
+            data1.input_variables = data1.input_variables[matching_rows]
+            data1.optimal_output = data1.optimal_output[matching_rows]
+        else:
+            pass
+    elif estimation_option in ['All','all']:
+        print('All data will be taken into consideration during estimation.')
+    else:
+        print('Something went wrong, maybe you misspelled the option. All data will be taken into consideration during estimation.')
+        
+    ## Calculating the coefficients standing by the values in the further equation
+    b = estimation.estimation(data1.input_variables,data1.optimal_output)
+
     ## User enters values to calculate optimal value
     print('\nPlease enter input values to calculate optimal output value.')
     w=list()
@@ -26,6 +57,10 @@ if data1.type == 'Excel':
     time.sleep(5)
 
 if data1.type == 'CSV':
+
+    ## Calculating the coefficients standing by the values in the further equation
+    b = estimation.estimation(data1.input_variables,data1.optimal_output)
+
     ## User enters values to calculate optimal value
     print('\nPlease enter input values to calculate optimal output value.')
     w=list()
