@@ -63,36 +63,42 @@ def importujExcel (data1):
     ## Setting import boundaries according to standard excel file
     if impsetting in ['Standard','standard']:
         wierszstart = 0
-        wierszkoniec = -1
+        wierszkoniec = None
         optymalna = 2
         wejsc_start = 3
-        wejsc_koniec = 8
+        wejsc_koniec = None
     
     ## User sets import boundaries
     elif impsetting in ['Manual','manual']:
         g = list(data1.table.columns)
+        
         wierszstart = int(input('Please enter index of the first row: '))
-        wierszkoniec = int(input('Please enter index of the last row: '))
 
-        user_input = input('Please enter index or name of the column with optimal values: ')
-        if user_input in g:
-            optymalna = g.index(user_input)
+        wierszkoniec = input('Please enter index of the last row: ')
+        if wierszkoniec == 'End':
+            wierszkoniec = None
         else:
-            optymalna = int(user_input)
+            wierszkoniec = int(wierszkoniec)
+        
+        optymalna = input('Please enter index or name of the column with optimal values: ')
+        if optymalna in g:
+            optymalna = g.index(optymalna)
+        else:
+            optymalna = int(optymalna)
 
-        user_input = input('Please enter index or name of the first column with input values: ')
-        if user_input in g:
-            wejsc_start = g.index(user_input)
+        wejsc_start = input('Please enter index or name of the first column with input values: ')
+        if wejsc_start in g:
+            wejsc_start = g.index(wejsc_start)
         else:
-            wejsc_start = int(user_input)
+            wejsc_start = int(wejsc_start)
 
-        user_input = input('Please enter index or name of the last column with input values: ')
-        if user_input in g:
-            wejsc_koniec = g.index(user_input) + 1
-        elif user_input == str(-1):
-            wejsc_koniec = int(user_input)
+        wejsc_koniec = input('Please enter index or name of the last column with input values: ')
+        if wejsc_koniec in g:
+            wejsc_koniec = g.index(wejsc_koniec) + 1
+        elif wejsc_koniec == 'End':
+            wejsc_koniec = None
         else:
-            wejsc_koniec = int(user_input) + 1
+            wejsc_koniec = int(wejsc_koniec)
 
     else:
         print('Something went wrong, maybe you misspelled the option.')
@@ -103,6 +109,7 @@ def importujExcel (data1):
     data1.column_names = data1.table.columns[wejsc_start:wejsc_koniec]
     data1.input_variables = np.array(data1.table.iloc[wierszstart:wierszkoniec,wejsc_start:wejsc_koniec])
     data1.optimal_output = np.array(data1.table.iloc[wierszstart:wierszkoniec,optymalna:optymalna+1])
+    print(data1.input_variables)
     return (data1)
 
 def importujCSV (data1):
