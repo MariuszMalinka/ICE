@@ -1,7 +1,8 @@
 import time
 import importuj
 import estimation
-import numpy as np
+import pandas as pd
+from datetime import datetime
 
 ## Importing variable for further use
 (data1) = importuj.importuj()
@@ -14,9 +15,10 @@ if data1.type == 'Excel':
     estimation_option = input()
     
     if estimation_option in ['Hour based','hour based']:
-        hour_check = input('Insert the time to which the relevant data should be treated. \n')
-        matching_rows = data1.table.iloc[:, 1] == hour_check
-        matching_rows = matching_rows[:-1]
+        hour_check_str = input('Insert the time to which the relevant data should be treated. \n')
+        hour_check = datetime.strptime(hour_check_str, '%H:%M:%S').time()
+        data1.table.iloc[:, 1] = pd.to_datetime(data1.table.iloc[:, 1], format='%H:%M:%S')
+        matching_rows = data1.table.iloc[:, 1].apply(lambda x: x.strftime('%H:%M:%S')) == hour_check_str
         if matching_rows.any():
             data1.input_variables = data1.input_variables[matching_rows]
             data1.optimal_output = data1.optimal_output[matching_rows]

@@ -109,7 +109,6 @@ def importujExcel (data1):
     data1.column_names = data1.table.columns[wejsc_start:wejsc_koniec]
     data1.input_variables = np.array(data1.table.iloc[wierszstart:wierszkoniec,wejsc_start:wejsc_koniec])
     data1.optimal_output = np.array(data1.table.iloc[wierszstart:wierszkoniec,optymalna:optymalna+1])
-    print(data1.input_variables)
     return (data1)
 
 def importujCSV (data1):
