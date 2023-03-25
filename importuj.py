@@ -2,11 +2,10 @@ import os
 import time
 import numpy as np
 import pandas as pd
-import csv
 def importuj ():
     
 
-    ## Creating a class containing all important information
+    ## Define a class called "Data" with various attributes
     class Data:
         def __init__(self,type,optimal_output,input_variables,column_names,table):
             self.type = type
@@ -15,97 +14,126 @@ def importuj ():
             self.column_names = column_names
             self.table = table
     
-    data1=Data(0,0,0,0,0)
+    ## Create an instance of the "Data" class with default values
+    imported_data=Data(0,0,0,0,0)
 
-
-    ## Import a file
+    ## Prompt the user to enter a file name or path
     user_input = input('Please enter file name or path: ')
 
+    ## If the file has a .xlsx extension, read it as an Excel file and store it in imported_data.table
     if user_input.find ('.xlsx') >= 0 :
-        data1.table = pd.read_excel(user_input)
-        data1.table.dropna(inplace=True)
-        data1.type = 'Excel'
-        return importujExcel(data1)
+        imported_data.table = pd.read_excel(user_input)
+        imported_data.table.dropna(inplace=True) ## Remove any rows with missing values
+        imported_data.type = 'Excel'
+        ## Call the importujExcel() function with the imported_data object as an argument
+        return importujExcel(imported_data)
 
+    ## If the file has a .csv extension, read it as a CSV file and store it in imported_data.table
     elif user_input.find ('.csv') >= 0 :
-        data1.table = pd.read_csv(user_input)
-        data1.type = 'CSV'
-        return importujCSV(data1)
+        imported_data.table = pd.read_csv(user_input)
+        imported_data.type = 'CSV'
+        ## Call the importujCSV() function with the imported_data object as an argument
+        return importujCSV(imported_data)
 
-    ## Distinguish file extension
+    ## If the file has no extension, search the current directory for files with the same name
     else:
+        ## Create an array of all files in the current directory
         b=np.array(os.listdir())
         j=0
+        ## Iterate through the array and split each filename by the "." character
         for i in range(len(b)):
             d=b[i].split(".")
+            ## If the first part of the filename matches the user input, store the extension in j and break the loop
             if d[0] == user_input:
                 j=d[1]
                 break
+        ## If the extension is .xlsx, read the file as an Excel file and store it in imported_data.table
         if j == 'xlsx' :
-            data1.table = pd.read_excel(user_input + str('.xlsx'))
-            data1.table.dropna(inplace=True) ## Deleting empty rows
-            data1.type = 'Excel'
-            return importujExcel(data1)
+            imported_data.table = pd.read_excel(user_input + str('.xlsx'))
+            imported_data.table.dropna(inplace=True) ## Remove any rows with missing values
+            imported_data.type = 'Excel'
+            ## Call the importujExcel() function with the imported_data object as an argument
+            return importujExcel(imported_data)
+        ## If the extension is .csv, read the file as a CSV file and store it in imported_data.table
         elif j == 'csv' :
-            data1.table = pd.read_csv(user_input + str('.csv'), header=None)
-            data1.type = 'CSV'
-            return importujCSV(data1)
+            imported_data.table = pd.read_csv(user_input + str('.csv'), header=None)
+            imported_data.type = 'CSV'
+            ## Call the importujCSV() function with the imported_data object as an argument
+            return importujCSV(imported_data)
+        ## If the file is not found or has an unrecognized extension, print an error message and exit the program
         else:
             print('Sorry, we could not find such file.')
             time.sleep(5)
             quit()
 
-def importujExcel (data1):
+def importujExcel (imported_data):
+    ## Prompting user to choose between importing options
     print('Choose between importing option.\n Write "Standard" if your file is compatible with standard file format.\n Write "Manual" if you want to set data boundaries by yourself.\nFor additional information check the user manual.')
 
+    ## Retrieving the user's choice
     impsetting = input()
 
-    ## Setting import boundaries according to standard excel file
+    ## Setting import boundaries according to standard Excel file
     if impsetting in ['Standard','standard']:
-        wierszstart = 0
-        wierszkoniec = -1
-        optymalna = 2
-        wejsc_start = 3
-        wejsc_koniec = 8
+        ## Standard boundary settings for Excel file
+        row_start = 0
+        row_end = None
+        optimal = 2
+        column_start = 3
+        column_end = None
     
     ## User sets import boundaries
     elif impsetting in ['Manual','manual']:
-        g = list(data1.table.columns)
-        wierszstart = int(input('Please enter index of the first row: '))
-        wierszkoniec = int(input('Please enter index of the last row: '))
+        ## Retrieving column names for the file
+        g = list(imported_data.table.columns)
+        
+        ## Retrieving row start boundary
+        row_start = int(input('Please enter index of the first row: '))
 
-        user_input = input('Please enter index or name of the column with optimal values: ')
-        if user_input in g:
-            optymalna = g.index(user_input)
+        ## Retrieving row end boundary
+        row_end = input('Please enter index of the last row: ')
+        if row_end == 'End':
+            row_end = None
         else:
-            optymalna = int(user_input)
+            row_end = int(row_end)
+        
+        ## Retrieving optimal column index or name
+        optimal = input('Please enter index or name of the column with optimal values: ')
+        if optimal in g:
+            optimal = g.index(optimal)
+        else:
+            optimal = int(optimal)
 
-        user_input = input('Please enter index or name of the first column with input values: ')
-        if user_input in g:
-            wejsc_start = g.index(user_input)
+        ## Retrieving column start index or name
+        column_start = input('Please enter index or name of the first column with input values: ')
+        if column_start in g:
+            column_start = g.index(column_start)
         else:
-            wejsc_start = int(user_input)
+            column_start = int(column_start)
 
-        user_input = input('Please enter index or name of the last column with input values: ')
-        if user_input in g:
-            wejsc_koniec = g.index(user_input) + 1
-        elif user_input == str(-1):
-            wejsc_koniec = int(user_input)
+        ## Retrieving column end index or name
+        column_end = input('Please enter index or name of the last column with input values: ')
+        if column_end in g:
+            column_end = g.index(column_end) + 1
+        elif column_end == 'End':
+            column_end = None
         else:
-            wejsc_koniec = int(user_input) + 1
+            column_end = int(column_end)
 
     else:
+        ## Error message if an incorrect option is chosen
         print('Something went wrong, maybe you misspelled the option.')
         time.sleep(5)
         quit()
 
     ## Creating arrays for further operations
-    data1.column_names = data1.table.columns[wejsc_start:wejsc_koniec]
-    data1.input_variables = np.array(data1.table.iloc[wierszstart:wierszkoniec,wejsc_start:wejsc_koniec])
-    data1.optimal_output = np.array(data1.table.iloc[wierszstart:wierszkoniec,optymalna:optymalna+1])
-    return (data1)
+    imported_data.column_names = imported_data.table.columns[column_start:column_end]
+    imported_data.input_variables = np.array(imported_data.table.iloc[row_start:row_end,column_start:column_end])
+    imported_data.optimal_output = np.array(imported_data.table.iloc[row_start:row_end,optimal:optimal+1])
+    ## Returning the imported data object
+    return (imported_data)
 
-def importujCSV (data1):
-    data1.optimal_output = np.array(data1.table.iloc[:,0:1])
-    data1.input_variables = np.array(data1.table.iloc[:,1:])
-    return (data1)
+def importujCSV (imported_data):
+    imported_data.optimal_output = np.array(imported_data.table.iloc[:,0:1])
+    imported_data.input_variables = np.array(imported_data.table.iloc[:,1:])
+    return (imported_data)
